@@ -1,0 +1,15 @@
+@import '../../styles/global.module.scss';
+.notiIcon {
+    position: relative;
+    &::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 10px;
+        height: 10px;
+        background: #fb9678;
+        border-radius: 50%;
+        
+    }
+}

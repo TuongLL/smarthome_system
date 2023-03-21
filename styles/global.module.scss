@@ -1,0 +1,12 @@
+$primary-blue: #03c9d7;
+$primary-red: #fb9678;
+$primary-bg: #fbfbfb;
+$text-gray: #777e89;
+$primary-yellow: #fec90f;
+:export {
+  primaryBlue: $primary-blue;
+  primaryRed: $primary-red;
+  primaryBg: $primary-bg;
+  primaryYellow: $primary-yellow;
+  textGray: $text-gray;
+}
