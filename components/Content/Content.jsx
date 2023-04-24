@@ -1,34 +1,41 @@
-import { Box, Typography } from "@mui/material";
-import React from "react";
-import Energy from "../Energy/Energy";
-import Weather from "../Weather/Weather";
+import { Box } from "@mui/material";
 import Door from "../Door/Door";
-import Light from "../Light/Light";
+import Energy from "../Energy/Energy";
 import Fan from "../Fan/Fan";
+import Light from "../Light/Light";
+import Weather from "../Weather/Weather";
+import React, {useEffect} from "react";
+import { getRoomsOfUser } from "@/utils/fetchAPI";
 
-function Content() {
+function Content({ collapsedState }) {
+  const [rooms, setRooms] = React.useState([]);
+  const userId = localStorage.getItem("userId");
+  const accessToken = localStorage.getItem("token");
+  useEffect(() => {
+    const fetchRooms = async () => {
+      const roomsResponse = await getRoomsOfUser(userId, accessToken);
+      setRooms(roomsResponse);
+    };
+    fetchRooms();
+  }, []);
   return (
-    <Box padding='0 24px' >
-      <Box display="flex" gap='24px' marginBottom='24px'>
-        <Box
-          flex={1}
-          
-          display='flex'
-          flexDirection='column'
-          gap='24px'
-        >
+    <Box
+      padding="12px 24px"
+      sx={{
+        width: collapsedState == false ? "calc(100% )" : "calc(100% + 100px)",
+      }}
+    >
+      <Box display="flex" gap="24px" marginBottom="24px">
+        <Box flex={7} display="flex" flexDirection="column" gap="24px">
           <Box display="flex" gap="12px">
             <Door status="unlocked" />
-            <Light />
+            <Light rooms={rooms} accessToken={accessToken}/>
           </Box>
           <Box flex={1}>
-            <Fan />
+            <Fan rooms={rooms} accessToken={accessToken}/>
           </Box>
         </Box>
-        <Box
-          
-          flex={1}
-        >
+        <Box flex={3}>
           <Weather />
         </Box>
       </Box>

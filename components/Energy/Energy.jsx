@@ -134,6 +134,7 @@ function Energy() {
       series={seriessalesoverview}
       type="area"
       height="295px"
+      width={1000}
     />
   );
 }

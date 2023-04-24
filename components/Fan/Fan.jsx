@@ -12,12 +12,26 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import WindPowerIcon from "@mui/icons-material/WindPower";
-function Fan() {
+import FanIcon from "../FanIcon/FanIcon";
+import { useSelector } from "react-redux";
+import { getDeviceByIds } from "@/utils/fetchAPI";
+import LightIcon from "../LigthIcon/LightIcon";
+function Fan({ rooms, accessToken }) {
+  const [selectRoom, setSelectRoom] = React.useState("");
+  const [selectDevice, setSelectDevice] = React.useState("");
+  const [devices, setDevices] = React.useState([]);
   const [check, setCheck] = React.useState(false);
-  const [room, setRoom] = React.useState("");
+  const isUserMode = useSelector((state) => state.mode.isUserMode);
+  const handleSelectRoom = async (event) => {
+    const room = event.target.value;
+    const devicesResponse = await getDeviceByIds(room.deviceIds, accessToken);
+    setDevices(devicesResponse);
+    setSelectRoom(room);
+  };
 
-  const handleChange = (event) => {
-    setRoom(event.target.value);
+  const handleSelectDevice = (event) => {
+    const device = event.target.value;
+    setSelectDevice(device);
   };
   return (
     <Box
@@ -47,22 +61,7 @@ function Fan() {
               lineHeight: 1,
             }}
           >
-            <Box
-              display="flex"
-              sx={{
-                background: "rgb(229 250 251)",
-                padding: "5px 10px",
-                borderRadius: "12px",
-              }}
-            >
-              <WindPowerIcon
-                style={{
-                  width: "40px",
-                  height: "40px",
-                  color: variables.primaryBlue,
-                }}
-              />
-            </Box>
+            <FanIcon />
             <Typography
               sx={{
                 fontWeight: 700,
@@ -72,41 +71,57 @@ function Fan() {
               Fan
             </Typography>
           </Box>
-          <Box display='flex' alignItems='center'>
-            <FormControl
-              disabled={!check}
-              sx={{ m: 1, minWidth: 120 }}
-              size="small"
-            >
+          <Box display="flex" flexDirection={'column'} alignItems="center">
+          <FormControl sx={{ m: 1, minWidth: 300 }} size="small">
               <InputLabel id="demo-select-small">Room</InputLabel>
               <Select
                 labelId="demo-select-small"
                 id="demo-select-small"
-                value={room}
+                value={selectRoom}
                 label="Room"
-                onChange={handleChange}
+                onChange={handleSelectRoom}
               >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
+                {rooms.map((room) => (
+                  <MenuItem value={room}>
+                    <Typography>{room.name}</Typography>
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
-            <Switch
-              onChange={(e) => setCheck(e.target.checked)}
-              sx={{
-                "& .MuiSwitch-switchBase.Mui-checked": {
-                  color: variables.primaryBlue,
-                },
-                "& .MuiSwitch-track": {
-                  borderRadius: 26 / 2,
-                  backgroundColor: variables.primaryRed,
-                  opacity: 1,
-                },
-              }}
-            />
+            <FormControl
+              sx={{ m: 1, minWidth: 300 }}
+              size="small"
+              disabled={selectRoom == "" ? true : false}
+            >
+              <InputLabel id="demo-simple-select-label">Device</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={selectDevice}
+                label="Device"
+                onChange={handleSelectDevice}
+              >
+                {devices.map((device) => {
+                  if (device.type == "fan") {
+                    return (
+                      <MenuItem value={device}>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "12px",
+                          }}
+                        >
+                          {device.type == "fan" ? <FanIcon /> : <></>}
+                          <Typography>{device.name}</Typography>
+                        </Box>
+                      </MenuItem>
+                    );
+                  }
+                  return <></>
+                })}
+              </Select>
+            </FormControl>
           </Box>
         </Box>
 
@@ -118,7 +133,7 @@ function Fan() {
             sx={{
               color: variables.primaryBlue,
             }}
-            disabled={!check}
+            disabled={!isUserMode}
           />
         </Box>
       </Box>

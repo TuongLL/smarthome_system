@@ -1,21 +1,33 @@
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import MenuIcon from "@mui/icons-material/Menu";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
-import { Badge, Button, Divider, Drawer } from "@mui/material";
+import {
+  Badge,
+  Button,
+  Divider,
+  FormControlLabel,
+  Switch,
+} from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Image from "next/image";
+import Link from "next/link";
 import * as React from "react";
+import { useProSidebar } from "react-pro-sidebar";
 import User from "../../assets/user.jpg";
+import variables from "../../styles/global.module.scss";
 import Notification from "../Notification/Notification";
 import UserProfile from "../UserProfile/UserProfile";
-import variables from "../../styles/global.module.scss";
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import { useDispatch } from "react-redux";
+import { setUserMode } from "@/store/slices/modeSlice";
 
-export default function Header() {
+export default function Header({ collapsedState, setCollapsedState }) {
+  const dispatch = useDispatch()
+
+  const { collapseSidebar } = useProSidebar();
   const [anchorUser, setAnchorUser] = React.useState(null);
   const [anchorNoti, setAnchorNoti] = React.useState(null);
   const userInfo = {
@@ -39,6 +51,7 @@ export default function Header() {
 
   const [invisible, setInvisible] = React.useState(true);
   const [open, setOpen] = React.useState(false);
+  const [usermodeState, setUsermodeState] = React.useState(false);
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -48,7 +61,12 @@ export default function Header() {
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box
+      sx={{
+        boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px",
+        background: "red",
+      }}
+    >
       <AppBar
         position="static"
         style={{ backgroundColor: "#fbfbfb", boxShadow: "unset" }}
@@ -61,7 +79,10 @@ export default function Header() {
               color="inherit"
               aria-label="menu"
               sx={{ mr: 2 }}
-              onClick={handleDrawerOpen}
+              onClick={() => {
+                collapseSidebar();
+                setCollapsedState(!collapsedState);
+              }}
             >
               <MenuIcon
                 sx={{
@@ -69,31 +90,15 @@ export default function Header() {
                 }}
               />
             </IconButton>
-            <Image
-              width={100}
-              height={100}
-              src="https://flexy-next-js-dashboard.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo-dark.f398d1f1.svg&w=128&q=75"
-            />
+            <Link href="/dashboard">
+              <Image
+                width={100}
+                height={50}
+                src="https://flexy-next-js-dashboard.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo-dark.f398d1f1.svg&w=128&q=75"
+              />
+            </Link>
           </Box>
-          <Drawer
-            sx={{
-              width: "100px",
-              flexShrink: 0,
-              "& .MuiDrawer-paper": {
-                width: "100px",
-                boxSizing: "border-box",
-              },
-            }}
-            variant="persistent"
-            anchor="left"
-            open={open}
-          >
-            <IconButton onClick={handleDrawerClose}>
-              <ChevronLeftIcon />
-            </IconButton>
 
-            <Divider />
-          </Drawer>
           <Box
             sx={{
               display: "flex",
@@ -101,6 +106,24 @@ export default function Header() {
               gap: "10px",
             }}
           >
+            <Box
+              sx={{
+                color: variables.textGray,
+                width: "150px",
+              }}
+            >
+              <FormControlLabel
+                control={
+                  <Switch
+                    onChange={() => {
+                      dispatch(setUserMode(!usermodeState));
+                      setUsermodeState(!usermodeState);
+                    }}
+                  />
+                }
+                label={usermodeState == false ? "Auto" : "User Mode"}
+              />
+            </Box>
             <IconButton
               size="large"
               aria-label="account of current user"

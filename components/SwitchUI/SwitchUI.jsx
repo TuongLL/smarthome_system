@@ -3,7 +3,6 @@ import { styled } from "@mui/material/styles";
 import variables from "../../styles/global.module.scss";
 function SwitchUI({ check, setCheck }) {
   const handleChange = (e) => {
-    console.log(e.target.checked)
     // setCheck(e.target.checked);
   };
   const IOSSwitch = styled((props) => (

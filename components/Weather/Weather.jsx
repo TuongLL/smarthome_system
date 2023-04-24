@@ -42,7 +42,7 @@ function Weather() {
       unitsLabels={{ temperature: `℃`, windSpeed: "Km/h" }}
       showForecast
       theme={customStyles}
-      
+
     />
   );
 }

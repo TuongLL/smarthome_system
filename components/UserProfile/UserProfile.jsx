@@ -11,7 +11,14 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import variables from "../../styles/global.module.scss";
+import Link from "next/link";
+import { useDispatch } from "react-redux";
+import { setAuth } from "@/store/slices/authSlice";
+import { useRouter } from "next/router";
 function UserProfile({ name, email, userImage, anchorUser, handleUserClose }) {
+  const dispatch = useDispatch()
+  const router = useRouter()
+
   return (
     <Menu
       id="user-control"
@@ -86,83 +93,99 @@ function UserProfile({ name, email, userImage, anchorUser, handleUserClose }) {
         </Box>
         <Divider />
         <MenuItem sx={{ padding: "20px" }}>
-          <Box
-            sx={{
-              display: "flex",
-              gap: "15px",
+          <Link
+            href="dashboard/profile"
+            style={{
+              textDecoration: "none",
+              color: "black",
             }}
-            alignItems="center"
           >
             <Box
-              display="flex"
               sx={{
-                background: "rgb(229 250 251)",
-                padding: "5px 10px",
-                borderRadius: "12px",
+                display: "flex",
+                gap: "15px",
               }}
               alignItems="center"
-              justifyContent="center"
             >
-              <AdminPanelSettingsIcon
-                style={{
-                  width: "40px",
-                  height: "40px",
-                  color: variables.primaryBlue,
-                }}
-              />
-            </Box>
-            <Box>
-              <Typography
+              <Box
+                display="flex"
                 sx={{
-                  fontWeight: "500",
-                  fontSize: "18px",
+                  background: "rgb(229 250 251)",
+                  padding: "5px 10px",
+                  borderRadius: "12px",
                 }}
+                alignItems="center"
+                justifyContent="center"
               >
-                My Profile
-              </Typography>
-              <Typography color="textSecondary">Account Settings</Typography>
+                <AdminPanelSettingsIcon
+                  style={{
+                    width: "40px",
+                    height: "40px",
+                    color: variables.primaryBlue,
+                  }}
+                />
+              </Box>
+              <Box>
+                <Typography
+                  sx={{
+                    fontWeight: "500",
+                    fontSize: "18px",
+                  }}
+                >
+                  My Profile
+                </Typography>
+                <Typography color="textSecondary">Account Settings</Typography>
+              </Box>
             </Box>
-          </Box>
+          </Link>
         </MenuItem>
         <Divider style={{ margin: 0 }} />
         <MenuItem sx={{ padding: "20px" }}>
-          <Box
-            sx={{
-              display: "flex",
-              gap: "15px",
+          <Link
+            href="dashboard/setting"
+            style={{
+              textDecoration: "none",
+              color: "black",
             }}
-            alignItems="center"
           >
             <Box
-              display="flex"
               sx={{
-                background: "rgb(253 243 245)",
-                padding: "5px 10px",
-                borderRadius: "12px",
+                display: "flex",
+                gap: "15px",
               }}
               alignItems="center"
-              justifyContent="center"
             >
-              <AppSettingsAltIcon
-                style={{
-                  width: "40px",
-                  height: "40px",
-                  color: variables.primaryRed,
-                }}
-              />
-            </Box>
-            <Box>
-              <Typography
+              <Box
+                display="flex"
                 sx={{
-                  fontWeight: "500",
-                  fontSize: "18px",
+                  background: "rgb(253 243 245)",
+                  padding: "5px 10px",
+                  borderRadius: "12px",
                 }}
+                alignItems="center"
+                justifyContent="center"
               >
-                My Home
-              </Typography>
-              <Typography color="textSecondary">Device Settings</Typography>
+                <AppSettingsAltIcon
+                  style={{
+                    width: "40px",
+                    height: "40px",
+                    color: variables.primaryRed,
+                  }}
+                />
+              </Box>
+              <Box>
+                <Typography
+                  sx={{
+                    fontWeight: "500",
+                    fontSize: "18px",
+                  }}
+                >
+                  My Home
+                </Typography>
+                <Typography color="textSecondary">Device Settings</Typography>
+              </Box>
             </Box>
-          </Box>
+          </Link>
         </MenuItem>
         <Box
           sx={{
@@ -179,6 +202,9 @@ function UserProfile({ name, email, userImage, anchorUser, handleUserClose }) {
                 bgcolor: "rgb(5 178 189)",
               },
             }}
+            onClick={() => {
+              router.push('login')
+              dispatch(setAuth(false))}}
           >
             Logout
           </Button>

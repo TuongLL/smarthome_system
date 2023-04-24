@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import variables from "../../styles/global.module.scss";
 import LightbulbIcon from "@mui/icons-material/Lightbulb";
+import LightIcon from "../LigthIcon/LightIcon";
 
 function Notification({ anchorNoti, handleNotiClose }) {
   const notifications = [
@@ -90,9 +91,9 @@ function Notification({ anchorNoti, handleNotiClose }) {
                   display="flex"
                   alignItems="center"
                   gap="18px"
-                  padding="10px 0"
+                  padding="5px 0"
                 >
-                  <Box
+                  {/* <Box
                     display="flex"
                     sx={{
                       background:
@@ -115,12 +116,13 @@ function Notification({ anchorNoti, handleNotiClose }) {
                             : variables.primaryRed,
                       }}
                     />
-                  </Box>
+                  </Box> */}
+                  <LightIcon  status={'on'}/> 
                   <Box>
                     <Typography
                       sx={{
                         fontWeight: "500",
-                        fontSize: "18px",
+                        fontSize: "16px",
                       }}
                     >
                       {title}
