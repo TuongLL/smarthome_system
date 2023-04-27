@@ -1,10 +1,11 @@
 import ReactWeather, { useWeatherBit } from "react-open-weather";
 
-import React from "react";
+import React, { useEffect } from "react";
 
 function Weather() {
+  
   const { data, isLoading, errorMessage } = useWeatherBit({
-    key: "05c4e371245e4f3986628a4b3b1c6019",
+    key: "ac323fd9de9a4225b8d5c836d193884c",
     lat: "48.137154",
     lon: "11.576124",
     lang: "en",

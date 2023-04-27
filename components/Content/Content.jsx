@@ -5,19 +5,9 @@ import Fan from "../Fan/Fan";
 import Light from "../Light/Light";
 import Weather from "../Weather/Weather";
 import React, {useEffect} from "react";
-import { getRoomsOfUser } from "@/utils/fetchAPI";
 
 function Content({ collapsedState }) {
-  const [rooms, setRooms] = React.useState([]);
-  const userId = localStorage.getItem("userId");
-  const accessToken = localStorage.getItem("token");
-  useEffect(() => {
-    const fetchRooms = async () => {
-      const roomsResponse = await getRoomsOfUser(userId, accessToken);
-      setRooms(roomsResponse);
-    };
-    fetchRooms();
-  }, []);
+  
   return (
     <Box
       padding="12px 24px"
@@ -29,10 +19,10 @@ function Content({ collapsedState }) {
         <Box flex={7} display="flex" flexDirection="column" gap="24px">
           <Box display="flex" gap="12px">
             <Door status="unlocked" />
-            <Light rooms={rooms} accessToken={accessToken}/>
+            <Light />
           </Box>
           <Box flex={1}>
-            <Fan rooms={rooms} accessToken={accessToken}/>
+            <Fan />
           </Box>
         </Box>
         <Box flex={3}>

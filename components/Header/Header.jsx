@@ -25,7 +25,7 @@ import { useDispatch } from "react-redux";
 import { setUserMode } from "@/store/slices/modeSlice";
 
 export default function Header({ collapsedState, setCollapsedState }) {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const { collapseSidebar } = useProSidebar();
   const [anchorUser, setAnchorUser] = React.useState(null);
@@ -91,9 +91,10 @@ export default function Header({ collapsedState, setCollapsedState }) {
               />
             </IconButton>
             <Link href="/dashboard">
-              <Image
+              <img
                 width={100}
                 height={50}
+                alt="alt img"
                 src="https://flexy-next-js-dashboard.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo-dark.f398d1f1.svg&w=128&q=75"
               />
             </Link>
@@ -157,8 +158,9 @@ export default function Header({ collapsedState, setCollapsedState }) {
               flexItem
             />
             <Button aria-controls="user-control" onClick={handleUserMenu}>
-              <Image
-                src={User}
+              <img
+                alt="alt img"
+                src={"https://w7.pngwing.com/pngs/81/570/png-transparent-profile-logo-computer-icons-user-user-blue-heroes-logo-thumbnail.png"}
                 width="30"
                 height="30"
                 style={{ borderRadius: "100%" }}

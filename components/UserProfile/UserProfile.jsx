@@ -16,8 +16,8 @@ import { useDispatch } from "react-redux";
 import { setAuth } from "@/store/slices/authSlice";
 import { useRouter } from "next/router";
 function UserProfile({ name, email, userImage, anchorUser, handleUserClose }) {
-  const dispatch = useDispatch()
-  const router = useRouter()
+  const dispatch = useDispatch();
+  const router = useRouter();
 
   return (
     <Menu
@@ -47,8 +47,9 @@ function UserProfile({ name, email, userImage, anchorUser, handleUserClose }) {
           }}
           alignItems="center"
         >
-          <Image
-            src={userImage}
+          <img
+            alt="alt image"
+            src="https://w7.pngwing.com/pngs/81/570/png-transparent-profile-logo-computer-icons-user-user-blue-heroes-logo-thumbnail.png"
             style={{ borderRadius: "50%", width: "120px", height: "120px" }}
           />
           <Box>
@@ -203,8 +204,9 @@ function UserProfile({ name, email, userImage, anchorUser, handleUserClose }) {
               },
             }}
             onClick={() => {
-              router.push('login')
-              dispatch(setAuth(false))}}
+              router.push("login");
+              dispatch(setAuth(false));
+            }}
           >
             Logout
           </Button>

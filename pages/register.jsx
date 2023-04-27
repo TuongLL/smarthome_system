@@ -25,13 +25,15 @@ function register() {
         padding="0 20px"
       >
         <Box position="absolute">
-          <Image
+          <img
+            alt="alt img"
             width={150}
             height={150}
             src="https://flexy-next-js-dashboard.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo-dark.f398d1f1.svg&w=128&q=75"
           />
         </Box>
-        <Image
+        <img
+          alt="alt img"
           width={800}
           height={600}
           src="https://flexy-next-js-dashboard.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogin-bg.a9ef922d.svg&w=1920&q=75"
@@ -64,7 +66,6 @@ function register() {
               sx={{
                 color: variables.primaryBlue,
                 fontWeight: 500,
-                
               }}
             >
               Sign In

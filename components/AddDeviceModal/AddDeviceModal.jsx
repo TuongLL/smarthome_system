@@ -136,8 +136,8 @@ function AddDeviceModal({ isJoined, roomId, setRooms, setLoading, rooms }) {
               label="Device"
               onChange={handleSelectDevice}
             >
-              {devices.map((device) => (
-                <MenuItem value={device}>
+              {devices.map((device, index) => (
+                <MenuItem value={device} key={index}>
                   <Box
                     sx={{
                       display: "flex",

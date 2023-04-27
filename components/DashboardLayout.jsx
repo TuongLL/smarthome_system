@@ -25,7 +25,7 @@ export default function DashboardLayout({
     }
   }, []);
   const itemList = [
-    { icon: <DashboardIcon />, title: "Dashboard", link: "/" },
+    { icon: <DashboardIcon />, title: "Dashboard", link: "" },
     {
       icon: <AccountCircleIcon />,
       title: "User Profile",
@@ -53,9 +53,10 @@ export default function DashboardLayout({
                 },
               }}
             >
-              {itemList.map((item) => {
+              {itemList.map((item, index) => {
                 return (
                   <MenuItem
+                    key={index}
                     active
                     icon={item.icon}
                     component={
@@ -68,11 +69,13 @@ export default function DashboardLayout({
               })}
             </Menu>
           </Sidebar>
-          <Box sx={{
-            minHeight: 'calc(100vh - 24px)',
-            width:  'auto'
-          }}>
-          {children}
+          <Box
+            sx={{
+              minHeight: "calc(100vh - 24px)",
+              width: "auto",
+            }}
+          >
+            {children}
           </Box>
         </Box>
       </>

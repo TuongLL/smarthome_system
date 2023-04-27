@@ -10,7 +10,7 @@ import {
   Divider,
   FormControl,
   TextField,
-  Typography
+  Typography,
 } from "@mui/material";
 import axios from "axios";
 import Image from "next/image";
@@ -29,7 +29,6 @@ function Login() {
   const [loading, setLoading] = React.useState(false);
   const dispatch = useDispatch();
   const handleLogin = async () => {
-
     try {
       const response = await axios.post(
         AUTH_LOGIN,
@@ -43,9 +42,9 @@ function Login() {
           },
         }
       );
-      const data = response.data.data
-      const accessToken = data.accessToken
-      const userId = data.id
+      const data = response.data.data;
+      const accessToken = data.accessToken;
+      const userId = data.id;
       setLoginMessage(false);
       setLoading(true);
       setTimeout(() => {
@@ -53,9 +52,8 @@ function Login() {
         router.push("dashboard");
       }, 2000);
       dispatch(setAuth(true));
-      localStorage.setItem("token", accessToken)
-      localStorage.setItem("userId", userId)
-
+      localStorage.setItem("token", accessToken);
+      localStorage.setItem("userId", userId);
     } catch (err) {
       setLoginMessage(true);
     }
@@ -72,13 +70,15 @@ function Login() {
         padding="0 20px"
       >
         <Box position="absolute">
-          <Image
+          <img
+            alt="alt img"
             width={150}
             height={150}
             src="https://flexy-next-js-dashboard.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo-dark.f398d1f1.svg&w=128&q=75"
           />
         </Box>
-        <Image
+        <img
+          alt="alt img"
           width={800}
           height={600}
           src="https://flexy-next-js-dashboard.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogin-bg.a9ef922d.svg&w=1920&q=75"

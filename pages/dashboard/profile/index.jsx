@@ -21,26 +21,29 @@ function Profile() {
       phoneNumber: "123123123",
     });
   }, []);
-  
-  const handleSave = async () => {
-  }
+
+  const handleSave = async () => {};
 
   return (
-    <Box display="flex" padding="25px" gap='25px'>
+    <Box display="flex" padding="25px" gap="25px">
       <Box>
-        <Image
-          src={userImage}
+        <img
+          alt="alt img"
+          src={"https://w7.pngwing.com/pngs/81/570/png-transparent-profile-logo-computer-icons-user-user-blue-heroes-logo-thumbnail.png"}
           width={200}
           height="auto"
           style={{ borderRadius: "12px" }}
         />
       </Box>
-      <Box display={'flex'} sx={{
-        flexDirection: 'column',
-        gap: '12px',
-        justifyContent: 'center'
-      }}>
-        <Box display={"flex"} sx={{gap:'25px'}}>
+      <Box
+        display={"flex"}
+        sx={{
+          flexDirection: "column",
+          gap: "12px",
+          justifyContent: "center",
+        }}
+      >
+        <Box display={"flex"} sx={{ gap: "25px" }}>
           <Box>
             <Typography>First Name</Typography>
             <TextField
@@ -66,13 +69,10 @@ function Profile() {
             />
           </Box>
         </Box>
-        <Box display={"flex"} sx={{gap:'25px'}}>
+        <Box display={"flex"} sx={{ gap: "25px" }}>
           <Box>
             <Typography>Email</Typography>
-            <TextField
-            disabled
-              value={info.email}
-            />
+            <TextField disabled value={info.email} />
           </Box>
           <Box>
             <Typography>Phone Number</Typography>
@@ -87,7 +87,9 @@ function Profile() {
             />
           </Box>
         </Box>
-        <Button variant="contained" onClick={handleSave}>Save Change</Button>
+        <Button variant="contained" onClick={handleSave}>
+          Save Change
+        </Button>
       </Box>
     </Box>
   );

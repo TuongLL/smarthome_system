@@ -1,3 +1,5 @@
+import { getDeviceByIds, getRoomsOfUser, toggleStatus } from "@/utils/fetchAPI";
+import LightbulbIcon from "@mui/icons-material/Lightbulb";
 import {
   Box,
   FormControl,
@@ -6,24 +8,27 @@ import {
   Switch,
   Typography,
 } from "@mui/material";
-import React, { useEffect } from "react";
-import LightbulbIcon from "@mui/icons-material/Lightbulb";
-import SwitchUI from "../SwitchUI/SwitchUI";
-import variables from "../../styles/global.module.scss";
 import Select from "@mui/material/Select";
+import { last } from "lodash";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { getDeviceByIds, getRoomsOfUser } from "@/utils/fetchAPI";
+import variables from "../../styles/global.module.scss";
 import FanIcon from "../FanIcon/FanIcon";
 import LightIcon from "../LigthIcon/LightIcon";
+import { toast } from "react-toastify";
 
-function Light({rooms, accessToken}) {
+function Light() {
   const [selectRoom, setSelectRoom] = React.useState("");
   const [selectDevice, setSelectDevice] = React.useState("");
   const [devices, setDevices] = React.useState([]);
+  const [rooms, setRooms] = React.useState([]);
   const [check, setCheck] = React.useState(false);
+  const [defaultCheck, setDefaultCheck] = React.useState(false);
   const isUserMode = useSelector((state) => state.mode.isUserMode);
-    
-  
+
+  const accessToken = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+
   const handleSelectRoom = async (event) => {
     const room = event.target.value;
     const devicesResponse = await getDeviceByIds(room.deviceIds, accessToken);
@@ -31,10 +36,41 @@ function Light({rooms, accessToken}) {
     setSelectRoom(room);
   };
 
-  const handleSelectDevice = (event) => {
+  const handleSelectDevice = async (event) => {
     const device = event.target.value;
+    console.log(last(device.record));
+    setCheck(last(device.record).state);
     setSelectDevice(device);
   };
+
+  const handleSwitch = async (e) => {
+    const status = !check;
+    await toggleStatus(selectDevice._id.toString(), status, accessToken);
+    setCheck(() => status);
+    const message =
+      status == true
+        ? "Turn ON the light successfully"
+        : "Turn OFF the light successfully";
+    toast.success(`🦄${message}`, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+  };
+
+  useEffect(() => {
+    const getRooms = async () => {
+      const room = await getRoomsOfUser(userId, accessToken);
+      setRooms(room);
+    };
+    getRooms();
+  }, []);
+
   return (
     <Box
       sx={{
@@ -67,10 +103,10 @@ function Light({rooms, accessToken}) {
           />
         </Box>
         <Switch
-          onChange={(e) => setCheck(e.target.checked)}
+          onChange={handleSwitch}
           disabled={!isUserMode || selectDevice == "" || selectRoom == ""}
-          // checked= {(selectDevice != "" && selectRoom != "")? check : !check}
-          // disableRipple
+          // defaultChecked={defaultCheck}
+          checked={check}
           sx={{
             "& .MuiSwitch-switchBase.Mui-checked": {
               color: variables.primaryBlue,
@@ -101,8 +137,8 @@ function Light({rooms, accessToken}) {
           label="Room"
           onChange={handleSelectRoom}
         >
-          {rooms.map((room) => (
-            <MenuItem value={room}>
+          {rooms.map((room, index) => (
+            <MenuItem value={room} key={index}>
               <Typography>{room.name}</Typography>
             </MenuItem>
           ))}
@@ -121,22 +157,24 @@ function Light({rooms, accessToken}) {
           label="Device"
           onChange={handleSelectDevice}
         >
-          {devices.map((device) => {
-            if (device.type == 'light'){
-              return <MenuItem value={device}>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "12px",
-                }}
-              >
-                {device.type == "fan" ? <FanIcon /> : <LightIcon />}
-                <Typography>{device.name}</Typography>
-              </Box>
-            </MenuItem>
+          {devices.map((device, index) => {
+            if (device.type == "light") {
+              return (
+                <MenuItem value={device} key={index}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "12px",
+                    }}
+                  >
+                    {device.type == "fan" ? <FanIcon /> : <LightIcon />}
+                    <Typography>{device.name}</Typography>
+                  </Box>
+                </MenuItem>
+              );
             }
-            return <></>
+            return <Box key={index}></Box>;
           })}
         </Select>
       </FormControl>

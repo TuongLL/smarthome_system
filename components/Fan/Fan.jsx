@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import variables from "../../styles/global.module.scss";
 import {
   Box,
@@ -14,13 +14,20 @@ import Image from "next/image";
 import WindPowerIcon from "@mui/icons-material/WindPower";
 import FanIcon from "../FanIcon/FanIcon";
 import { useSelector } from "react-redux";
-import { getDeviceByIds } from "@/utils/fetchAPI";
+import { changSpeed, getDeviceByIds, getRoomsOfUser, toggleStatus } from "@/utils/fetchAPI";
 import LightIcon from "../LigthIcon/LightIcon";
-function Fan({ rooms, accessToken }) {
+import { last } from "lodash";
+import { toast } from "react-toastify";
+function Fan() {
   const [selectRoom, setSelectRoom] = React.useState("");
   const [selectDevice, setSelectDevice] = React.useState("");
   const [devices, setDevices] = React.useState([]);
-  const [check, setCheck] = React.useState(false);
+  const [rooms, setRooms] = React.useState([]);
+  const [value, setValue] = React.useState(50);
+
+  const accessToken = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+
   const isUserMode = useSelector((state) => state.mode.isUserMode);
   const handleSelectRoom = async (event) => {
     const room = event.target.value;
@@ -31,8 +38,34 @@ function Fan({ rooms, accessToken }) {
 
   const handleSelectDevice = (event) => {
     const device = event.target.value;
+    setValue(last(device.record).state);
     setSelectDevice(device);
   };
+
+  const handleChange = async (e) => {
+    const newValue = e.target.value;
+    await changSpeed(selectDevice._id.toString(), newValue, accessToken);
+    setValue(newValue);
+    toast.success(`🦄Change speed to ${newValue} successfully`, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+  };
+
+  useEffect(() => {
+    const getRooms = async () => {
+      const room = await getRoomsOfUser(userId, accessToken);
+      setRooms(room);
+    };
+    getRooms();
+  }, []);
+
   return (
     <Box
       flex={1}
@@ -71,8 +104,8 @@ function Fan({ rooms, accessToken }) {
               Fan
             </Typography>
           </Box>
-          <Box display="flex" flexDirection={'column'} alignItems="center">
-          <FormControl sx={{ m: 1, minWidth: 300 }} size="small">
+          <Box display="flex" flexDirection={"column"} alignItems="center">
+            <FormControl sx={{ m: 1, minWidth: 300 }} size="small">
               <InputLabel id="demo-select-small">Room</InputLabel>
               <Select
                 labelId="demo-select-small"
@@ -81,8 +114,8 @@ function Fan({ rooms, accessToken }) {
                 label="Room"
                 onChange={handleSelectRoom}
               >
-                {rooms.map((room) => (
-                  <MenuItem value={room}>
+                {rooms.map((room, index) => (
+                  <MenuItem value={room} key={index}>
                     <Typography>{room.name}</Typography>
                   </MenuItem>
                 ))}
@@ -101,10 +134,10 @@ function Fan({ rooms, accessToken }) {
                 label="Device"
                 onChange={handleSelectDevice}
               >
-                {devices.map((device) => {
+                {devices.map((device, index) => {
                   if (device.type == "fan") {
                     return (
-                      <MenuItem value={device}>
+                      <MenuItem value={device} key={index}>
                         <Box
                           sx={{
                             display: "flex",
@@ -118,7 +151,7 @@ function Fan({ rooms, accessToken }) {
                       </MenuItem>
                     );
                   }
-                  return <></>
+                  return <Box key={index}></Box>;
                 })}
               </Select>
             </FormControl>
@@ -127,21 +160,23 @@ function Fan({ rooms, accessToken }) {
 
         <Box>
           <Slider
-            defaultValue={50}
+            defaultValue={value}
+            value={value}
             aria-label="Default"
             valueLabelDisplay="auto"
             sx={{
               color: variables.primaryBlue,
             }}
             disabled={!isUserMode}
+            onChange={handleChange}
           />
         </Box>
       </Box>
       <Box>
-        <Image
+        <img
           width={100}
           height={100}
-          //   style={{ width: "120px", height: "120px" }}
+          alt="alt img"
           src="https://flexy-next-js-dashboard.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fwelcome-bg2-2x-svg.67cde987.svg&w=640&q=75"
         />
       </Box>

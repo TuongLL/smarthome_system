@@ -96,6 +96,15 @@ export async function removeUserInRoom(roomId, userId, accessToken) {
       },
     }
   );
+
+  axios.patch(
+    `${USER}/${userId}/rooms/${roomId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
   return data.data;
 }
 
@@ -140,3 +149,34 @@ export async function getRoomsOfUser(userId, accessToken) {
   );
   return data.data;
 }
+
+export async function toggleStatus(deviceId, status, accessToken) {
+  const { data } = await axios.post(
+    `${DEVICE}/${deviceId}/light`,
+    {
+      status
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+);
+return data.data;
+}
+
+export async function changSpeed(deviceId, value, accessToken) {
+  const { data } = await axios.post(
+    `${DEVICE}/${deviceId}/fan`,
+    {
+      value
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+);
+return data.data;
+}
+

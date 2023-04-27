@@ -159,8 +159,8 @@ function Row({ room, setRooms, rooms, setLoading }) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {room.users.map((userRow) => (
-                    <TableRow key={userRow.date}>
+                  {room.users.map((userRow, index) => (
+                    <TableRow key={index}>
                       <TableCell>
                         <UserAvatar
                           userName={userRow.firstName.concat(
@@ -223,8 +223,8 @@ function Row({ room, setRooms, rooms, setLoading }) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {room.devices.map((deviceRow) => (
-                    <TableRow key={deviceRow.date}>
+                  {room.devices.map((deviceRow, index) => (
+                    <TableRow key={index}>
                       <TableCell>
                         {deviceRow.type == "fan" ? <FanIcon /> : <LightIcon />}
                       </TableCell>
